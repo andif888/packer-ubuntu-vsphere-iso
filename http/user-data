@@ -38,7 +38,7 @@ autoinstall:
     late-commands:
         - sed -i -e 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' /target/etc/ssh/sshd_config
         - sed -i -e 's/^#\?PermitRootLogin.*/PermitRootLogin yes/g' /target/etc/ssh/sshd_config
-        - echo 'vagrant ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/ubuntu
-        - curtin in-target --target=/target -- chmod 440 /etc/sudoers.d/ubuntu
+        - echo 'vagrant ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/vagrant
+        - curtin in-target --target=/target -- chmod 440 /etc/sudoers.d/vagrant
         - curtin in-target --target=/target -- apt-get update
         - curtin in-target --target=/target -- apt-get upgrade --yes
