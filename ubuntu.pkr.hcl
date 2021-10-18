@@ -150,6 +150,10 @@ source "vsphere-iso" "ubuntu" {
   boot_command          = var.boot_command
   shutdown_command      = "echo '${var.ssh_password}' | sudo -S -E shutdown -P now"
   shutdown_timeout      = "15m"
+
+  configuration_parameters = {
+    "disk.EnableUUID" = "true"
+  }
 }
 
 build {
