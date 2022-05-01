@@ -89,10 +89,14 @@ variable "ssh_username" {
   default = ""
 }
 
-variable "cloudinit_files" {
-  type = list(string)
-  description = "user-data and meta-data."
-  default = []
+variable "cloudinit_userdata" {
+  type = string
+  default = ""
+}
+
+variable "cloudinit_metadata" {
+  type = string
+  default = ""
 }
 
 variable "shell_scripts" {
@@ -124,19 +128,22 @@ source "vsphere-iso" "ubuntu" {
   guest_os_type         = var.vsphere_guest_os_type
   iso_checksum          = var.os_iso_checksum
   iso_url               = var.os_iso_url
-  floppy_files          = var.cloudinit_files
-  floppy_label          = "cidata"
+  cd_content            = {
+    "/meta-data" = file("${var.cloudinit_metadata}")
+    "/user-data" = file("${var.cloudinit_userdata}")
+  }
+  cd_label              = "cidata"
 
   network_adapters {
     network             = var.vsphere_network
     network_card        = "vmxnet3"
   }
-  
+
   storage {
     disk_size             = var.disk_size
     disk_thin_provisioned = true
-  } 
-  
+  }
+
   vm_name               = var.vsphere_vm_name
   convert_to_template   = "true"
   communicator          = "ssh"
@@ -144,9 +151,9 @@ source "vsphere-iso" "ubuntu" {
   ssh_password          = var.ssh_password
   ssh_timeout           = "30m"
   ssh_handshake_attempts = "100000"
-  
+
   boot_order            = "disk,cdrom,floppy"
-  boot_wait             = "3s" 
+  boot_wait             = "3s"
   boot_command          = var.boot_command
   shutdown_command      = "echo '${var.ssh_password}' | sudo -S -E shutdown -P now"
   shutdown_timeout      = "15m"

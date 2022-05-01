@@ -20,7 +20,8 @@ vsphere_network         = "VM Network"
 vsphere_datastore       = "datastore1"
 
 # cloud_init files for unattended configuration for Ubuntu
-cloudinit_files         = ["./http/user-data","./http/meta-data"]
+cloudinit_userdata      = "./http/user-data"
+cloudinit_metadata      = "./http/meta-data"
 
 # final clean up script
 shell_scripts           = ["./setup/setup.sh"]
